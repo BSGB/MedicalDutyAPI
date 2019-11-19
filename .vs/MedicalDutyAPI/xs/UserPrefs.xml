@@ -1,0 +1,31 @@
+﻿<Properties StartupConfiguration="{50BCD35B-DBD2-4386-A469-FC56181BB042}|Default">
+  <MonoDevelop.Ide.ItemProperties.MedicalDutyAPI PreferredExecutionTarget="/Applications/Safari.app" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="MedicalDutyAPI/Models/User.cs">
+    <Files>
+      <File FileName="MedicalDutyAPI/Models/User.cs" Line="21" Column="50" />
+      <File FileName="MedicalDutyAPI/Controllers/LoginController.cs" Line="34" Column="60" />
+      <File FileName="MedicalDutyAPI/Controllers/RegisterController.cs" Line="15" Column="1" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="MedicalDutyAPI" expanded="True">
+            <Node name="MedicalDutyAPI" expanded="True">
+              <Node name="Controllers" expanded="True" />
+              <Node name="Models" expanded="True">
+                <Node name="User.cs" selected="True" />
+              </Node>
+              <Node name="Properties" expanded="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>
