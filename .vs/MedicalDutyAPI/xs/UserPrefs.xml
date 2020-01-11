@@ -1,21 +1,22 @@
-﻿<Properties StartupConfiguration="{50BCD35B-DBD2-4386-A469-FC56181BB042}|Default">
+﻿<Properties StartupConfiguration="{50BCD35B-DBD2-4386-A469-FC56181BB042}|Default" NuGet.AddPackagesDialog.IncludePrerelease="True">
   <MonoDevelop.Ide.ItemProperties.MedicalDutyAPI PreferredExecutionTarget="/Applications/Safari.app" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="MedicalDutyAPI/Models/User.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="MedicalDutyAPI/sql.txt">
     <Files>
-      <File FileName="MedicalDutyAPI/Models/User.cs" Line="21" Column="50" />
-      <File FileName="MedicalDutyAPI/Controllers/LoginController.cs" Line="34" Column="60" />
-      <File FileName="MedicalDutyAPI/Controllers/RegisterController.cs" Line="15" Column="1" />
+      <File FileName="MedicalDutyAPI/Models/User.cs" Line="30" Column="42" />
+      <File FileName="MedicalDutyAPI/Controllers/LoginController.cs" Line="34" Column="37" />
+      <File FileName="MedicalDutyAPI/Controllers/RegisterController.cs" Line="21" Column="34" />
+      <File FileName="MedicalDutyAPI/DutyingContext.cs" Line="19" Column="1" />
+      <File FileName="MedicalDutyAPI/Models/Role.cs" Line="12" Column="20" />
+      <File FileName="MedicalDutyAPI/Models/UserToRole.cs" Line="22" Column="1" />
+      <File FileName="MedicalDutyAPI/Startup.cs" Line="30" Column="39" />
+      <File FileName="MedicalDutyAPI/sql.txt" Line="24" Column="53" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="MedicalDutyAPI" expanded="True">
-            <Node name="MedicalDutyAPI" expanded="True">
-              <Node name="Controllers" expanded="True" />
-              <Node name="Models" expanded="True">
-                <Node name="User.cs" selected="True" />
-              </Node>
-              <Node name="Properties" expanded="True" />
+            <Node name="MedicalDutyAPI" expanded="True" selected="True">
+              <Node name="Models" expanded="True" />
             </Node>
           </Node>
         </State>

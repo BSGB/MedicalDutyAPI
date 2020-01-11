@@ -1,0 +1,29 @@
+﻿create database medical_duty_database
+\connect medical_duty_database
+create schema medical_duty_schema
+
+
+create table if not exists medical_duty_schema.users
+(
+	id serial not null,
+	first_name varchar(255) not null,
+	last_name varchar(255) not null,
+	password varchar(255) not null,
+	salt varchar(255) not null,
+	email varchar(255) not null,
+	created_at timestamp with time zone not null
+);
+
+create table if not exists medical_duty_schema.users_to_roles
+(
+	id serial not null,
+	user_id integer not null,
+	role_id integer not null
+);
+
+create table if not exists medical_duty_schema.roles
+(
+	id serial not null,
+	name varchar(255) not null,
+	symbol integer not null
+);

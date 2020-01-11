@@ -6,14 +6,18 @@
 
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'Custom' ">
     <StartAction>Project</StartAction>
+    <ApplicationURL>http://localhost:5000</ApplicationURL>
     <LaunchBrowser></LaunchBrowser>
-    <ApplicationURL>https://localhost:5001;http://localhost:5000</ApplicationURL>
   </PropertyGroup>
   <ItemGroup>
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.6.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.0" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0-rc5" />
+    <PackageReference Include="Microsoft.OpenApi" Version="1.1.4" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />

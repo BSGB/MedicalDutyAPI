@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using MedicalDutyAPI.Models;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System.Security.Cryptography;
+using System.Linq;
+using Microsoft.AspNetCore.Http;
 
 namespace MedicalDutyAPI.Controllers
 {
@@ -11,8 +13,6 @@ namespace MedicalDutyAPI.Controllers
     [Route("api/[controller]")]
     public class RegisterController : Controller
     {
-        public static readonly List<User> usersMockup = new List<User>();
-
         private static readonly int numBytesSalt = 128 / 8;
         private static readonly int iterCount = 10000;
         private static readonly int numBytesReq = 256 / 8;
@@ -31,19 +31,40 @@ namespace MedicalDutyAPI.Controllers
 
             var user = new User
             {
-                Id = usersMockup.Count,
                 FirstName = firstName,
                 LastName = lastName,
                 Password = hashedPassword,
                 Salt = Convert.ToBase64String(salt),
                 Email = email,
-                Roles = new List<RoleEnum> { RoleEnum.Doctor },
-                CreatedAt = DateTimeOffset.Now.ToUnixTimeMilliseconds()
+                CreatedAt = DateTime.Now
             };
 
-            usersMockup.Add(user);
+            using var db = new DutyingContext();
 
-            return Ok(user);
+            try
+            {
+                var role = db.Roles
+                    .Where(role => role.Id == (int)RoleEnum.Doctor)
+                    .First();
+
+                user.UserRoles = new List<UserRole>()
+                {
+                    new UserRole() { Role = role }
+                };
+
+                db.Add(user);
+
+                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                return Problem(
+                    title: "Database communication error!",
+                    statusCode: StatusCodes.Status500InternalServerError,
+                    detail: ex.Message);
+            }
+
+            return Created("User created", user);
         }
 
         public static string HashPasswordPbkdf2(string password, byte[] salt)

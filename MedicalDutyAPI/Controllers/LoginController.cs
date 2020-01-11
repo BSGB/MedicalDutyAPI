@@ -6,6 +6,8 @@ using MedicalDutyAPI.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Security.Claims;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace MedicalDutyAPI.Controllers
 {
@@ -27,9 +29,15 @@ namespace MedicalDutyAPI.Controllers
         [HttpPost]
         public async Task<ActionResult> Post(string email, string password)
         {
-            var user = RegisterController.usersMockup.Find(user => user.Email == email);
+            using var db = new DutyingContext();
 
-            if (user == null) return NotFound("No user found!");
+            if (!db.Users.Any(user => user.Email == email)) return NotFound("No user found!");
+
+            var user = db.Users
+                .Include(user => user.UserRoles)
+                .ThenInclude(userRole => userRole.Role)
+                .Where(user => user.Email == email)
+                .First();
 
             var salt = Convert.FromBase64String(user.Salt);
             var hashedPassword = RegisterController.HashPasswordPbkdf2(password, salt);
@@ -71,9 +79,9 @@ namespace MedicalDutyAPI.Controllers
             claimsIdentity.AddClaim(new Claim(ClaimTypes.Name, user.FirstName));
             claimsIdentity.AddClaim(new Claim(ClaimTypes.Email, user.Email));
 
-            foreach (var role in user.Roles)
+            foreach (var role in user.UserRoles)
             {
-                claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, role.ToString("d")));
+                claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, role.Role.Name));
             }
 
             return Task.FromResult(claimsIdentity);
