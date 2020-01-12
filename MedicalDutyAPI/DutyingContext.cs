@@ -9,6 +9,7 @@ namespace MedicalDutyAPI
         public DbSet<User> Users {get; set;}
         public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<SchedulerEvent> SchedulerEvents { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             => optionsBuilder.UseNpgsql("Host=localhost;Database=medical_duty_database;Username=;Password=");

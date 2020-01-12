@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using MedicalDutyAPI.Models;
-using Microsoft.AspNetCore.Cryptography.KeyDerivation;
-using System.Security.Cryptography;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using System.Security.Cryptography;
 
 namespace MedicalDutyAPI.Controllers
 {
@@ -80,7 +80,7 @@ namespace MedicalDutyAPI.Controllers
             return hashedPassword;
         }
 
-        private static byte[] GenerateSalt()
+        public static byte[] GenerateSalt()
         {
             var salt = new byte[numBytesSalt];
 

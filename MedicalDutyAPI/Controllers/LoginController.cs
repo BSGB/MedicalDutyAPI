@@ -78,6 +78,7 @@ namespace MedicalDutyAPI.Controllers
             var claimsIdentity = new ClaimsIdentity();
             claimsIdentity.AddClaim(new Claim(ClaimTypes.Name, user.FirstName));
             claimsIdentity.AddClaim(new Claim(ClaimTypes.Email, user.Email));
+            claimsIdentity.AddClaim(new Claim(ClaimTypes.PrimarySid, user.Id.ToString()));
 
             foreach (var role in user.UserRoles)
             {

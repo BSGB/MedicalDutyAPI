@@ -27,3 +27,12 @@ create table if not exists medical_duty_schema.roles
 	name varchar(255) not null,
 	symbol integer not null
 );
+
+create table if not exists medical_duty_schema.scheduler_events
+(
+    id        serial                   not null,
+    user_id   integer                  not null,
+    starts_at timestamp with time zone not null,
+    ends_at   timestamp with time zone not null,
+    comment   text
+);

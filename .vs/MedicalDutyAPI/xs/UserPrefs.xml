@@ -2,21 +2,23 @@
   <MonoDevelop.Ide.ItemProperties.MedicalDutyAPI PreferredExecutionTarget="/Applications/Safari.app" />
   <MonoDevelop.Ide.Workbench ActiveDocument="MedicalDutyAPI/sql.txt">
     <Files>
-      <File FileName="MedicalDutyAPI/Models/User.cs" Line="30" Column="42" />
-      <File FileName="MedicalDutyAPI/Controllers/LoginController.cs" Line="34" Column="37" />
-      <File FileName="MedicalDutyAPI/Controllers/RegisterController.cs" Line="21" Column="34" />
-      <File FileName="MedicalDutyAPI/DutyingContext.cs" Line="19" Column="1" />
-      <File FileName="MedicalDutyAPI/Models/Role.cs" Line="12" Column="20" />
-      <File FileName="MedicalDutyAPI/Models/UserToRole.cs" Line="22" Column="1" />
-      <File FileName="MedicalDutyAPI/Startup.cs" Line="30" Column="39" />
-      <File FileName="MedicalDutyAPI/sql.txt" Line="24" Column="53" />
+      <File FileName="MedicalDutyAPI/Models/User.cs" Line="15" Column="17" />
+      <File FileName="MedicalDutyAPI/Controllers/LoginController.cs" />
+      <File FileName="MedicalDutyAPI/Controllers/RegisterController.cs" />
+      <File FileName="MedicalDutyAPI/Controllers/UsersController.cs" />
+      <File FileName="MedicalDutyAPI/Models/Role.cs" />
+      <File FileName="MedicalDutyAPI/DutyingContext.cs" />
+      <File FileName="MedicalDutyAPI/Controllers/SchedulerController.cs" Line="113" Column="35" />
+      <File FileName="MedicalDutyAPI/sql.txt" Line="37" Column="19" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="MedicalDutyAPI" expanded="True">
-            <Node name="MedicalDutyAPI" expanded="True" selected="True">
+            <Node name="MedicalDutyAPI" expanded="True">
+              <Node name="Controllers" expanded="True" />
               <Node name="Models" expanded="True" />
+              <Node name="sql.txt" selected="True" />
             </Node>
           </Node>
         </State>

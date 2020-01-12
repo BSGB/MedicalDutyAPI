@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Security.Cryptography;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
 namespace MedicalDutyAPI.Models
 {
@@ -33,5 +35,7 @@ namespace MedicalDutyAPI.Models
         public DateTime CreatedAt { get; set; }
 
         public List<UserRole> UserRoles { get; set; }
+
+        public List<SchedulerEvent> SchedulerEvents { get; set; }
     }
 }
