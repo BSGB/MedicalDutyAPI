@@ -27,7 +27,7 @@ namespace MedicalDutyAPI.Controllers
 
         [HttpGet("{id}")]
         [Authorize(Roles = "headmaster, doctor")]
-        public ActionResult<SchedulerEvent> Get([FromRoute]int eventId)
+        public ActionResult<SchedulerEvent> GetByEventId([FromRoute]int eventId)
         {
             using var db = new DutyingContext();
 
@@ -41,7 +41,7 @@ namespace MedicalDutyAPI.Controllers
 
         [HttpGet("userId/{userId}")]
         [Authorize(Roles = "headmaster, doctor")]
-        public ActionResult<SchedulerEvent> GetByUserId([FromRoute]int userId)
+        public ActionResult<IEnumerable<SchedulerEvent>> GetByUserId([FromRoute]int userId)
         {
             using var db = new DutyingContext();
 
@@ -58,7 +58,7 @@ namespace MedicalDutyAPI.Controllers
 
         [HttpPost]
         [Authorize(Roles = "headmaster, doctor")]
-        public ActionResult Post([FromBody]SchedulerEvent schedulerEvent)
+        public ActionResult<SchedulerEvent> Post([FromBody]SchedulerEvent schedulerEvent)
         {
             using var db = new DutyingContext();
 

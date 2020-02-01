@@ -13,7 +13,7 @@ namespace MedicalDutyAPI.Controllers
     public class UsersController : Controller
     {
         [HttpGet]
-        [Authorize(Roles = "headmaster, doctor")]
+        [Authorize(Roles = "headmaster, doctor, administrator")]
         public ActionResult<IEnumerable<User>> Get()
         {
             using var db = new DutyingContext();
@@ -27,7 +27,7 @@ namespace MedicalDutyAPI.Controllers
         }
 
         [HttpGet("{userId}")]
-        [Authorize(Roles = "headmaster, doctor")]
+        [Authorize(Roles = "headmaster, doctor, administrator")]
         public ActionResult<User> Get([FromRoute]int userId)
         {
             using var db = new DutyingContext();
@@ -44,8 +44,8 @@ namespace MedicalDutyAPI.Controllers
         }
 
         [HttpPut]
-        [Authorize(Roles = "headmaster, doctor")]
-        public ActionResult Put([FromBody]User user)
+        [Authorize(Roles = "headmaster, doctor, administrator")]
+        public ActionResult<User> Put([FromBody]User user)
         {
             using var db = new DutyingContext();
 
@@ -60,11 +60,10 @@ namespace MedicalDutyAPI.Controllers
             if (dbUser.LastName != user.LastName) dbUser.LastName = user.LastName;
             if (dbUser.Email != user.Email) dbUser.Email = user.Email;
 
-            var newRoles = user.UserRoles
-                .Where(userRole => !dbUser.UserRoles.Any(dbUserRole => dbUserRole.Id == userRole.Id))
-                .ToList();
+            dbUser.UserRoles.RemoveAll(dbUr => !user.UserRoles.Any(ur => dbUr.RoleId == ur.RoleId));
+            user.UserRoles.RemoveAll(ur => dbUser.UserRoles.Any(dbUr => dbUr.RoleId == ur.RoleId));
 
-            dbUser.UserRoles.AddRange(newRoles);
+            if (user.UserRoles.Count > 0) dbUser.UserRoles.AddRange(user.UserRoles);
 
             if (!string.IsNullOrEmpty(user.Password) && dbUser.Password != user.Password)
             {

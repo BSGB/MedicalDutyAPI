@@ -56,9 +56,17 @@
               "target": "Package",
               "version": "[3.1.1, )"
             },
+            "Microsoft.Extensions.Logging.Debug": {
+              "target": "Package",
+              "version": "[3.0.0, )"
+            },
             "Microsoft.OpenApi": {
               "target": "Package",
               "version": "[1.1.4, )"
+            },
+            "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
+              "target": "Package",
+              "version": "[3.0.0, )"
             },
             "Npgsql.EntityFrameworkCore.PostgreSQL": {
               "target": "Package",
