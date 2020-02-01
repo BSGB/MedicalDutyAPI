@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MedicalDutyAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +14,7 @@ namespace MedicalDutyAPI.Controllers
     public class SchedulerController : Controller
     {
         [HttpGet]
+        [Authorize(Roles = "headmaster, doctor")]
         public ActionResult<IEnumerable<SchedulerEvent>> Get()
         {
             using var db = new DutyingContext();
@@ -24,6 +26,7 @@ namespace MedicalDutyAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "headmaster, doctor")]
         public ActionResult<SchedulerEvent> Get([FromRoute]int eventId)
         {
             using var db = new DutyingContext();
@@ -37,6 +40,7 @@ namespace MedicalDutyAPI.Controllers
         }
 
         [HttpGet("userId/{userId}")]
+        [Authorize(Roles = "headmaster, doctor")]
         public ActionResult<SchedulerEvent> GetByUserId([FromRoute]int userId)
         {
             using var db = new DutyingContext();
@@ -53,6 +57,7 @@ namespace MedicalDutyAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "headmaster, doctor")]
         public ActionResult Post([FromBody]SchedulerEvent schedulerEvent)
         {
             using var db = new DutyingContext();
@@ -74,6 +79,7 @@ namespace MedicalDutyAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "headmaster, doctor")]
         public ActionResult Delete([FromRoute]int eventId)
         {
             using var db = new DutyingContext();
@@ -90,6 +96,7 @@ namespace MedicalDutyAPI.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "headmaster, doctor")]
         public ActionResult Put([FromBody]SchedulerEvent schedulerEvent)
         {
             using var db = new DutyingContext();

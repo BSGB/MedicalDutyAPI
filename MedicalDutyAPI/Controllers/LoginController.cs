@@ -8,6 +8,7 @@ using System.Text;
 using System.Security.Claims;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MedicalDutyAPI.Controllers
 {
@@ -15,9 +16,9 @@ namespace MedicalDutyAPI.Controllers
     [Route("api/[controller]")]
     public class LoginController : ControllerBase
     {
-        private static readonly string secretKey = "Tdt7J0zZfObeuL156DKhvcNGX3IslxEW";
-        private static readonly string tokenIssuer = "server";
-        private static readonly string tokenAudience = "server";
+        public static readonly string secretKey = "Tdt7J0zZfObeuL156DKhvcNGX3IslxEW";
+        public static readonly string tokenIssuer = "server";
+        public static readonly string tokenAudience = "server";
         private static readonly int tokenValidMinutes = 15;
 
         [HttpGet]
@@ -27,6 +28,7 @@ namespace MedicalDutyAPI.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<ActionResult> Post(string email, string password)
         {
             using var db = new DutyingContext();

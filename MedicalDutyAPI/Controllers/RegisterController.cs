@@ -6,6 +6,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System.Security.Cryptography;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MedicalDutyAPI.Controllers
 {
@@ -24,8 +25,13 @@ namespace MedicalDutyAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "headmaster, administrator")]
         public ActionResult<User> Post(string firstName, string lastName, string password, string email)
         {
+            using var db = new DutyingContext();
+
+            if (db.Users.Any(user => user.Email == email)) return Problem(title: "User with given email already exists!", statusCode: StatusCodes.Status409Conflict);
+
             var salt = GenerateSalt();
             var hashedPassword = HashPasswordPbkdf2(password, salt);
 
@@ -39,7 +45,6 @@ namespace MedicalDutyAPI.Controllers
                 CreatedAt = DateTime.Now
             };
 
-            using var db = new DutyingContext();
 
             try
             {

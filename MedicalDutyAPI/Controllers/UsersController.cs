@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using MedicalDutyAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MedicalDutyAPI.Controllers
 {
@@ -12,6 +13,7 @@ namespace MedicalDutyAPI.Controllers
     public class UsersController : Controller
     {
         [HttpGet]
+        [Authorize(Roles = "headmaster, doctor")]
         public ActionResult<IEnumerable<User>> Get()
         {
             using var db = new DutyingContext();
@@ -25,6 +27,7 @@ namespace MedicalDutyAPI.Controllers
         }
 
         [HttpGet("{userId}")]
+        [Authorize(Roles = "headmaster, doctor")]
         public ActionResult<User> Get([FromRoute]int userId)
         {
             using var db = new DutyingContext();
@@ -41,6 +44,7 @@ namespace MedicalDutyAPI.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "headmaster, doctor")]
         public ActionResult Put([FromBody]User user)
         {
             using var db = new DutyingContext();
@@ -78,6 +82,7 @@ namespace MedicalDutyAPI.Controllers
         }
 
         [HttpDelete("{userId}")]
+        [Authorize(Roles = "headmaster, administrator")]
         public ActionResult Delete([FromRoute]int userId)
         {
             using var db = new DutyingContext();
