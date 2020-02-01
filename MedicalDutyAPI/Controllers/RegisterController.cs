@@ -44,7 +44,7 @@ namespace MedicalDutyAPI.Controllers
             try
             {
                 var role = db.Roles
-                    .Where(role => role.Id == (int)RoleEnum.Doctor)
+                    .Where(role => role.Symbol == (int)RoleEnum.Doctor)
                     .First();
 
                 user.UserRoles = new List<UserRole>()

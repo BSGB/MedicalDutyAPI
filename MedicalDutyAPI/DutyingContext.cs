@@ -12,11 +12,6 @@ namespace MedicalDutyAPI
         public DbSet<SchedulerEvent> SchedulerEvents { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-            => optionsBuilder.UseNpgsql("Host=localhost;Database=medical_duty_database;Username=;Password=");
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.HasDefaultSchema("medical_duty_schema");
-        }
+            => optionsBuilder.UseSqlServer(@"Server = localhost\SQLEXPRESS; Database=medical_duty;Trusted_Connection=True;");
     }
 }
