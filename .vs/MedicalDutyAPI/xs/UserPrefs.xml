@@ -1,15 +1,14 @@
 ﻿<Properties StartupConfiguration="{50BCD35B-DBD2-4386-A469-FC56181BB042}|Default" NuGet.AddPackagesDialog.IncludePrerelease="True">
   <MonoDevelop.Ide.ItemProperties.MedicalDutyAPI PreferredExecutionTarget="/Applications/Safari.app" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="MedicalDutyAPI/sql.txt">
+  <MonoDevelop.Ide.Workbench ActiveDocument="MedicalDutyAPI/DutyingContext.cs">
     <Files>
       <File FileName="MedicalDutyAPI/Models/User.cs" Line="15" Column="17" />
       <File FileName="MedicalDutyAPI/Controllers/LoginController.cs" />
       <File FileName="MedicalDutyAPI/Controllers/RegisterController.cs" />
       <File FileName="MedicalDutyAPI/Controllers/UsersController.cs" />
       <File FileName="MedicalDutyAPI/Models/Role.cs" />
-      <File FileName="MedicalDutyAPI/DutyingContext.cs" />
-      <File FileName="MedicalDutyAPI/Controllers/SchedulerController.cs" Line="113" Column="35" />
-      <File FileName="MedicalDutyAPI/sql.txt" Line="37" Column="19" />
+      <File FileName="MedicalDutyAPI/DutyingContext.cs" Line="1" Column="1" />
+      <File FileName="MedicalDutyAPI/Controllers/SchedulerController.cs" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -18,7 +17,7 @@
             <Node name="MedicalDutyAPI" expanded="True">
               <Node name="Controllers" expanded="True" />
               <Node name="Models" expanded="True" />
-              <Node name="sql.txt" selected="True" />
+              <Node name="DutyingContext.cs" selected="True" />
             </Node>
           </Node>
         </State>
