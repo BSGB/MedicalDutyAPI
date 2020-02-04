@@ -4,14 +4,16 @@ using MedicalDutyAPI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MedicalDutyAPI.Migrations
 {
     [DbContext(typeof(DutyingContext))]
-    partial class DutyingContextModelSnapshot : ModelSnapshot
+    [Migration("20200204173044_HospitalsWardsUpdate")]
+    partial class HospitalsWardsUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -124,6 +126,10 @@ namespace MedicalDutyAPI.Migrations
                         .HasColumnName("first_name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("HospitalId")
+                        .HasColumnName("hospital_id")
+                        .HasColumnType("int");
+
                     b.Property<string>("LastName")
                         .HasColumnName("last_name")
                         .HasColumnType("nvarchar(max)");
@@ -141,6 +147,8 @@ namespace MedicalDutyAPI.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("HospitalId");
 
                     b.HasIndex("WardId");
 
@@ -180,8 +188,11 @@ namespace MedicalDutyAPI.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("HospitalId")
+                    b.Property<string>("HospitalId")
                         .HasColumnName("hospital_id")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("HospitalId1")
                         .HasColumnType("int");
 
                     b.Property<int>("Type")
@@ -190,7 +201,7 @@ namespace MedicalDutyAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("HospitalId");
+                    b.HasIndex("HospitalId1");
 
                     b.ToTable("wards");
                 });
@@ -206,6 +217,12 @@ namespace MedicalDutyAPI.Migrations
 
             modelBuilder.Entity("MedicalDutyAPI.Models.User", b =>
                 {
+                    b.HasOne("MedicalDutyAPI.Models.Hospital", "Hospital")
+                        .WithMany("Users")
+                        .HasForeignKey("HospitalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("MedicalDutyAPI.Models.Ward", "Ward")
                         .WithMany("Users")
                         .HasForeignKey("WardId")
@@ -232,9 +249,7 @@ namespace MedicalDutyAPI.Migrations
                 {
                     b.HasOne("MedicalDutyAPI.Models.Hospital", "Hospital")
                         .WithMany("Wards")
-                        .HasForeignKey("HospitalId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("HospitalId1");
                 });
 #pragma warning restore 612, 618
         }

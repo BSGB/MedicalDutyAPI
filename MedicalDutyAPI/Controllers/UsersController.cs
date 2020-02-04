@@ -26,8 +26,9 @@ namespace MedicalDutyAPI.Controllers
             return Ok(users);
         }
 
-        [HttpGet("{userId}")]
-        [Authorize(Roles = "headmaster, doctor, administrator")]
+        [HttpGet("userId/{userId}")]
+        //[Authorize(Roles = "headmaster, doctor, administrator")]
+        [AllowAnonymous]
         public ActionResult<User> Get([FromRoute]int userId)
         {
             using var db = new DutyingContext();
@@ -43,8 +44,28 @@ namespace MedicalDutyAPI.Controllers
             return Ok(user);
         }
 
+        [HttpGet("wardId/{wardId}")]
+        //[Authorize(Roles = "headmaster, doctor, administrator")]
+        [AllowAnonymous]
+        public ActionResult<User> GetByWardId([FromRoute]int wardId)
+        {
+            using var db = new DutyingContext();
+
+            var users = db.Wards
+                .Include(ward => ward.Users)
+                .Where(ward => ward.Id == wardId)
+                .Select(ward => ward.Users)
+                .ToList();
+
+            if (users is null) return NotFound();
+
+            return Ok(users);
+        }
+
+        //TODO
         [HttpPut]
-        [Authorize(Roles = "headmaster, doctor, administrator")]
+        //[Authorize(Roles = "headmaster, doctor, administrator")]
+        [AllowAnonymous]
         public ActionResult<User> Put([FromBody]User user)
         {
             using var db = new DutyingContext();
@@ -80,6 +101,7 @@ namespace MedicalDutyAPI.Controllers
             return Ok(dbUser);
         }
 
+        //TODO
         [HttpDelete("{userId}")]
         [Authorize(Roles = "headmaster, administrator")]
         public ActionResult Delete([FromRoute]int userId)

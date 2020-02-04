@@ -20,7 +20,6 @@ namespace MedicalDutyAPI.Models
         [Column("last_name")]
         public string LastName { get; set; }
 
-        [JsonIgnore]
         [Column("password")]
         public string Password { get; set; }
 
@@ -33,6 +32,11 @@ namespace MedicalDutyAPI.Models
 
         [Column("created_at")]
         public DateTime CreatedAt { get; set; }
+
+        [Column("ward_id")]
+        public int WardId { get; set; }
+
+        public Ward Ward { get; set; }
 
         public List<UserRole> UserRoles { get; set; }
 

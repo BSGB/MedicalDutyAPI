@@ -10,9 +10,6 @@ namespace MedicalDutyAPI.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        [Column("user_id")]
-        public int UserId { get; set; }
-
         [Column("starts_at")]
         public DateTime StartsAt { get; set; }
 
@@ -21,5 +18,10 @@ namespace MedicalDutyAPI.Models
 
         [Column("comment")]
         public string Comment { get; set; }
+
+        [Column("user_id")]
+        public int UserId { get; set; }
+
+        public User User { get; set; }
     }
 }

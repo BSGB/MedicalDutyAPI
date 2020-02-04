@@ -93,10 +93,11 @@ namespace MedicalDutyAPI
 
             app.UseRouting();
 
+            app.UseCors("AllowAll");
+
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseCors("AllowAll");
 
             app.UseEndpoints(endpoints =>
             {

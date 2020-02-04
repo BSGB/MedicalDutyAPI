@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 
 namespace MedicalDutyAPI.Controllers
 {
@@ -25,26 +26,27 @@ namespace MedicalDutyAPI.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "headmaster, administrator")]
-        public ActionResult<User> Post(string firstName, string lastName, string password, string email)
+        //[Authorize(Roles = "headmaster, administrator")]
+        [AllowAnonymous]
+        public ActionResult<User> Post([FromBody]User user)
         {
             using var db = new DutyingContext();
 
-            if (db.Users.Any(user => user.Email == email)) return Problem(title: "User with given email already exists!", statusCode: StatusCodes.Status409Conflict);
+            if (db.Users.Any(u => u.Email == user.Email)) return Problem(title: "User with given email already exists!", statusCode: StatusCodes.Status409Conflict);
+
+            var ward = db.Wards
+                .Include(ward => ward.Users)
+                    .ThenInclude(users => user.UserRoles)
+                .FirstOrDefault(ward => ward.Id == user.WardId);
+
+            if (ward.Users is null) ward.Users = new List<User>();
 
             var salt = GenerateSalt();
-            var hashedPassword = HashPasswordPbkdf2(password, salt);
+            var hashedPassword = HashPasswordPbkdf2(user.Password, salt);
 
-            var user = new User
-            {
-                FirstName = firstName,
-                LastName = lastName,
-                Password = hashedPassword,
-                Salt = Convert.ToBase64String(salt),
-                Email = email,
-                CreatedAt = DateTime.Now
-            };
-
+            user.Password = hashedPassword;
+            user.Salt = Convert.ToBase64String(salt);
+            user.CreatedAt = DateTime.Now;
 
             try
             {
@@ -57,8 +59,9 @@ namespace MedicalDutyAPI.Controllers
                     new UserRole() { Role = role }
                 };
 
-                db.Add(user);
+                ward.Users.Add(user);
 
+                db.Wards.Update(ward);
                 db.SaveChanges();
             }
             catch (Exception ex)
