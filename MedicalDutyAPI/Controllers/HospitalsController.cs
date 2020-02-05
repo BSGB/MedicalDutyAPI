@@ -14,8 +14,7 @@ namespace MedicalDutyAPI.Controllers
     public class HospitalsController : ControllerBase
     {
         [HttpGet]
-        //[Authorize(Roles = "headmaster, administrator")]
-        [AllowAnonymous]
+        [Authorize(Roles = "headmaster, administrator")]
         public ActionResult<IEnumerable<Hospital>> Get()
         {
             using var db = new DutyingContext();
@@ -27,8 +26,7 @@ namespace MedicalDutyAPI.Controllers
         }
 
         [HttpGet("{hospitalId}")]
-        //[Authorize(Roles = "headmaster, administrator")]
-        [AllowAnonymous]
+        [Authorize(Roles = "headmaster, administrator")]
         public ActionResult<IEnumerable<Hospital>> Get([FromRoute]int hospitalId)
         {
             using var db = new DutyingContext();
@@ -43,8 +41,7 @@ namespace MedicalDutyAPI.Controllers
         }
 
         [HttpPost]
-        //[Authorize(Roles = "administrator")]
-        [AllowAnonymous]
+        [Authorize(Roles = "administrator")]
         public ActionResult<Hospital> Post(string street, string zip, string city, string district, string name)
         {
             using var db = new DutyingContext();
@@ -76,8 +73,7 @@ namespace MedicalDutyAPI.Controllers
         }
 
         [HttpPut]
-        //[Authorize(Roles = "administrator")]
-        [AllowAnonymous]
+        [Authorize(Roles = "administrator")]
         public ActionResult<Hospital> Put([FromBody]Hospital hospital)
         {
             using var db = new DutyingContext();
@@ -98,6 +94,23 @@ namespace MedicalDutyAPI.Controllers
 
 
             return Ok(dbHospital);
+        }
+
+        [HttpDelete("{hospitalId}")]
+        [Authorize(Roles = "administrator")]
+        public ActionResult Delete([FromRoute]int hospitalId)
+        {
+            using var db = new DutyingContext();
+
+            var hospital = db.Hospitals
+                .FirstOrDefault(hospital => hospital.Id == hospitalId);
+
+            if (hospital is null) return NotFound();
+
+            db.Hospitals.Remove(hospital);
+            db.SaveChanges();
+
+            return Ok();
         }
     }
 }

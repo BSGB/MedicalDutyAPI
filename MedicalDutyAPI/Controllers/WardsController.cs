@@ -15,8 +15,7 @@ namespace MedicalDutyAPI.Controllers
     public class WardsController : ControllerBase
     {
         [HttpGet("{hospitalId}")]
-        //[Authorize(Roles = "headmaster, administrator")]
-        [AllowAnonymous]
+        [Authorize(Roles = "headmaster, administrator")]
         public ActionResult<IEnumerable<Ward>> Get([FromRoute]int hospitalId)
         {
             using var db = new DutyingContext();
@@ -51,6 +50,23 @@ namespace MedicalDutyAPI.Controllers
             db.SaveChanges();
 
             return Created("", ward);
+        }
+
+        [HttpDelete("{wardId}")]
+        [Authorize(Roles = "headmaster, administrator")]
+        public ActionResult Delete([FromRoute]int wardId)
+        {
+            using var db = new DutyingContext();
+
+            var ward = db.Wards
+                .FirstOrDefault(ward => ward.Id == wardId);
+
+            if (ward is null) return NotFound();
+
+            db.Wards.Remove(ward);
+            db.SaveChanges();
+
+            return Ok();
         }
     }
 }

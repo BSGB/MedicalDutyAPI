@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace MedicalDutyAPI.Models
@@ -18,7 +19,8 @@ namespace MedicalDutyAPI.Models
 
         [Column("hospital_id")]
         public int HospitalId { get; set; }
-
+        
+        [JsonIgnore]
         public Hospital Hospital { get; set; }
 
         public List<User> Users { get; set; }

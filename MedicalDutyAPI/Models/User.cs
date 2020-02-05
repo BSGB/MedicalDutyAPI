@@ -36,6 +36,7 @@ namespace MedicalDutyAPI.Models
         [Column("ward_id")]
         public int WardId { get; set; }
 
+        [JsonIgnore]
         public Ward Ward { get; set; }
 
         public List<UserRole> UserRoles { get; set; }

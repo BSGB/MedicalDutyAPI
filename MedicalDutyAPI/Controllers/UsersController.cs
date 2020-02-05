@@ -27,8 +27,7 @@ namespace MedicalDutyAPI.Controllers
         }
 
         [HttpGet("userId/{userId}")]
-        //[Authorize(Roles = "headmaster, doctor, administrator")]
-        [AllowAnonymous]
+        [Authorize(Roles = "headmaster, doctor, administrator")]
         public ActionResult<User> Get([FromRoute]int userId)
         {
             using var db = new DutyingContext();
@@ -45,8 +44,7 @@ namespace MedicalDutyAPI.Controllers
         }
 
         [HttpGet("wardId/{wardId}")]
-        //[Authorize(Roles = "headmaster, doctor, administrator")]
-        [AllowAnonymous]
+        [Authorize(Roles = "headmaster, doctor, administrator")]
         public ActionResult<User> GetByWardId([FromRoute]int wardId)
         {
             using var db = new DutyingContext();
@@ -62,10 +60,8 @@ namespace MedicalDutyAPI.Controllers
             return Ok(users);
         }
 
-        //TODO
         [HttpPut]
-        //[Authorize(Roles = "headmaster, doctor, administrator")]
-        [AllowAnonymous]
+        [Authorize(Roles = "headmaster, doctor, administrator")]
         public ActionResult<User> Put([FromBody]User user)
         {
             using var db = new DutyingContext();
@@ -80,13 +76,14 @@ namespace MedicalDutyAPI.Controllers
             if (dbUser.FirstName != user.FirstName) dbUser.FirstName = user.FirstName;
             if (dbUser.LastName != user.LastName) dbUser.LastName = user.LastName;
             if (dbUser.Email != user.Email) dbUser.Email = user.Email;
+            if (dbUser.WardId != user.WardId) dbUser.WardId = user.WardId;
 
             dbUser.UserRoles.RemoveAll(dbUr => !user.UserRoles.Any(ur => dbUr.RoleId == ur.RoleId));
             user.UserRoles.RemoveAll(ur => dbUser.UserRoles.Any(dbUr => dbUr.RoleId == ur.RoleId));
 
             if (user.UserRoles.Count > 0) dbUser.UserRoles.AddRange(user.UserRoles);
 
-            if (!string.IsNullOrEmpty(user.Password) && dbUser.Password != user.Password)
+            if (!string.IsNullOrEmpty(user.Password) && dbUser.Password != RegisterController.HashPasswordPbkdf2(user.Password, Convert.FromBase64String(dbUser.Salt)))
             {
                 var salt = RegisterController.GenerateSalt();
                 var hashedPassword = RegisterController.HashPasswordPbkdf2(user.Password, salt);
@@ -101,7 +98,6 @@ namespace MedicalDutyAPI.Controllers
             return Ok(dbUser);
         }
 
-        //TODO
         [HttpDelete("{userId}")]
         [Authorize(Roles = "headmaster, administrator")]
         public ActionResult Delete([FromRoute]int userId)
@@ -109,15 +105,11 @@ namespace MedicalDutyAPI.Controllers
             using var db = new DutyingContext();
 
             var user = db.Users
-                .Include(user => user.UserRoles)
-                .Include(user => user.SchedulerEvents)
                 .FirstOrDefault(user => user.Id == userId);
 
             if (user is null) return NotFound();
 
             db.Users.Remove(user);
-            db.UserRoles.RemoveRange(user.UserRoles);
-            if (user.SchedulerEvents != null) db.SchedulerEvents.RemoveRange(user.SchedulerEvents);
             db.SaveChanges();
 
             return Ok();

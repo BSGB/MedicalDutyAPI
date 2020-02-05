@@ -26,8 +26,7 @@ namespace MedicalDutyAPI.Controllers
         }
 
         [HttpPost]
-        //[Authorize(Roles = "headmaster, administrator")]
-        [AllowAnonymous]
+        [Authorize(Roles = "headmaster, administrator")]
         public ActionResult<User> Post([FromBody]User user)
         {
             using var db = new DutyingContext();

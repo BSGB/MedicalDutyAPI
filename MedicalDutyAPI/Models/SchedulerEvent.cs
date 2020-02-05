@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace MedicalDutyAPI.Models
 {
@@ -22,6 +23,7 @@ namespace MedicalDutyAPI.Models
         [Column("user_id")]
         public int UserId { get; set; }
 
+        [JsonIgnore]
         public User User { get; set; }
     }
 }
