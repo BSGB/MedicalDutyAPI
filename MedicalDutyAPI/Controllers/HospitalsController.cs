@@ -78,7 +78,7 @@ namespace MedicalDutyAPI.Controllers
         {
             using var db = new DutyingContext();
 
-            if (db.Hospitals.Any(h => h.Id == hospital.Id)) return NotFound();
+            if (!db.Hospitals.Any(h => h.Id == hospital.Id)) return NotFound();
 
             var dbHospital = db.Hospitals
                 .FirstOrDefault(h => h.Id == hospital.Id);
