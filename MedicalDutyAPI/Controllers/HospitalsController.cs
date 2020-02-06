@@ -6,6 +6,7 @@ using MedicalDutyAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace MedicalDutyAPI.Controllers
 {
@@ -38,6 +39,22 @@ namespace MedicalDutyAPI.Controllers
             if (hospital is null) return NotFound();
 
             return Ok(hospital);
+        }
+        
+        [HttpGet("wardId/{wardId}")]
+        [Authorize(Roles = "headmaster, doctor, administrator")]
+        public ActionResult<Hospital> GetByWardId([FromRoute]int wardId)
+        {
+            using var db = new DutyingContext();
+
+            var hospitals = db.Hospitals
+                .Include(hospital => hospital.Wards)
+                .Where(hospital => hospital.Wards.Any(ward => ward.Id == wardId))
+                .ToList();
+
+            if (hospitals is null) return NotFound();
+
+            return Ok(hospitals);
         }
 
         [HttpPost]
