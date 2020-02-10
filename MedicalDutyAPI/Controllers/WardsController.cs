@@ -31,6 +31,21 @@ namespace MedicalDutyAPI.Controllers
             return Ok(wards);
         }
 
+        [HttpGet("userId/{userId}")]
+        [Authorize(Roles = "doctor, headmaster, administrator")]
+        public ActionResult<Ward> GetByUserId([FromRoute] int userId)
+        {
+            using var db = new DutyingContext();
+
+            var ward = db.Wards
+                .Where(ward => ward.Users.Any(user => user.Id == userId))
+                .FirstOrDefault();
+
+            if (ward is null) return NotFound();
+
+            return Ok(ward);
+        }
+
         [HttpPost]
         public ActionResult<Ward> Post([FromBody]Ward ward)
         {
