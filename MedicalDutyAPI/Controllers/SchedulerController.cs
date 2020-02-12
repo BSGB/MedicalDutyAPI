@@ -78,7 +78,7 @@ namespace MedicalDutyAPI.Controllers
             return Created("", schedulerEvent);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{eventId}")]
         [Authorize(Roles = "headmaster, doctor")]
         public ActionResult Delete([FromRoute]int eventId)
         {
@@ -115,8 +115,7 @@ namespace MedicalDutyAPI.Controllers
                     e.EndsAt = e.EndsAt != schedulerEvent.EndsAt ? schedulerEvent.EndsAt : e.EndsAt;
                     e.Comment = e.Comment != schedulerEvent.Comment ? schedulerEvent.Comment : e.Comment;
                     return e;
-                });
-
+                }).ToList();
             db.Users.Update(user);
             db.SaveChanges();
 
