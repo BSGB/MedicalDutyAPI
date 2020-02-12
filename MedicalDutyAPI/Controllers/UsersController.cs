@@ -14,15 +14,28 @@ namespace MedicalDutyAPI.Controllers
     {
         [HttpGet]
         [Authorize(Roles = "headmaster, doctor, administrator")]
-        public ActionResult<IEnumerable<User>> Get()
+        public ActionResult<IEnumerable<User>> Get([FromHeader(Name = "Paging-PageNo")] int pageNo, [FromHeader(Name = "Paging-PageSize")] int pageSize)
         {
+            int skipRecords = (pageNo - 1) * pageSize;
+            
             using var db = new DutyingContext();
 
+            int totalRecords = db.Users.Count();
+            int pageCount = totalRecords > 0 ? (int) Math.Ceiling(totalRecords / (double) pageSize) : 0;
+
             var users = db.Users
+                .OrderBy(user => user.LastName)
+                .Skip(skipRecords)
+                .Take(pageSize)
                 .Include(user => user.UserRoles)
-                    .ThenInclude(userRole => userRole.Role)
+                .ThenInclude(userRole => userRole.Role)
                 .ToList();
 
+            Response.Headers.Add("Paging-PageNo", pageNo.ToString());
+            Response.Headers.Add("Paging-PageSize", pageSize.ToString());
+            Response.Headers.Add("Paging-PageCount", pageCount.ToString());
+            Response.Headers.Add("Paging-TotalRecordsCount", totalRecords.ToString());
+            
             return Ok(users);
         }
 
