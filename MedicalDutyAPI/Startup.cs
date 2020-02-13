@@ -35,7 +35,7 @@ namespace MedicalDutyAPI
                         .AllowAnyMethod()
                         .WithExposedHeaders("Paging-PageNo", "Paging-PageSize", "Paging-PageCount",
                             "Paging-TotalRecordsCount")
-                        .WithHeaders("Paging-PageNo", "Paging-PageSize");
+                        .WithHeaders("Paging-PageNo", "Paging-PageSize", "Search-Phrase");
                 });
             });
 
