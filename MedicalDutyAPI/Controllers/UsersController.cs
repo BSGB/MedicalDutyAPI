@@ -14,41 +14,56 @@ namespace MedicalDutyAPI.Controllers
     {
         [HttpGet]
         [Authorize(Roles = "headmaster, doctor, administrator")]
-        public ActionResult<IEnumerable<User>> Get([FromHeader(Name = "Paging-PageNo")] int pageNo, [FromHeader(Name = "Paging-PageSize")] int pageSize)
+        public ActionResult<IEnumerable<User>> Get(
+            [FromHeader(Name = "Paging-PageNo")] int pageNo,
+            [FromHeader(Name = "Paging-PageSize")] int pageSize,
+            [FromHeader(Name = "Search-Phrase")] string searchPhrase)
         {
             int skipRecords = (pageNo - 1) * pageSize;
-            
-            using var db = new DutyingContext();
 
-            int totalRecords = db.Users.Count();
+            using var db = new DutyingContext();
+            
+            var query = db.Users.AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchPhrase))
+            {
+                query = query.Where(user =>
+                    user.Email.ToLower().Contains(searchPhrase.ToLower()) ||
+                    user.FirstName.ToLower().Contains(searchPhrase.ToLower()) ||
+                    user.LastName.ToLower().Contains(searchPhrase.ToLower()));
+            }
+            
+            int totalRecords = query.Count();
+            
             int pageCount = totalRecords > 0 ? (int) Math.Ceiling(totalRecords / (double) pageSize) : 0;
 
-            var users = db.Users
-                .OrderBy(user => user.LastName)
+            var users = query.OrderBy(user => user.LastName)
                 .Skip(skipRecords)
                 .Take(pageSize)
                 .Include(user => user.UserRoles)
                 .ThenInclude(userRole => userRole.Role)
                 .ToList();
 
+            pageNo = Math.Min(pageCount, pageNo);
+
             Response.Headers.Add("Paging-PageNo", pageNo.ToString());
             Response.Headers.Add("Paging-PageSize", pageSize.ToString());
             Response.Headers.Add("Paging-PageCount", pageCount.ToString());
             Response.Headers.Add("Paging-TotalRecordsCount", totalRecords.ToString());
-            
+
             return Ok(users);
         }
 
         [HttpGet("userId/{userId}")]
         [Authorize(Roles = "headmaster, doctor, administrator")]
-        public ActionResult<User> Get([FromRoute]int userId)
+        public ActionResult<User> Get([FromRoute] int userId)
         {
             using var db = new DutyingContext();
 
             var user = db.Users
                 .Where(user => user.Id == userId)
                 .Include(user => user.UserRoles)
-                    .ThenInclude(userRole => userRole.Role)
+                .ThenInclude(userRole => userRole.Role)
                 .FirstOrDefault();
 
             if (user is null) return NotFound();
@@ -58,7 +73,7 @@ namespace MedicalDutyAPI.Controllers
 
         [HttpGet("wardId/{wardId}")]
         [Authorize(Roles = "headmaster, doctor, administrator")]
-        public ActionResult<User> GetByWardId([FromRoute]int wardId)
+        public ActionResult<User> GetByWardId([FromRoute] int wardId)
         {
             using var db = new DutyingContext();
 
@@ -75,7 +90,7 @@ namespace MedicalDutyAPI.Controllers
 
         [HttpPut]
         [Authorize(Roles = "headmaster, doctor, administrator")]
-        public ActionResult<User> Put([FromBody]User user)
+        public ActionResult<User> Put([FromBody] User user)
         {
             using var db = new DutyingContext();
 
@@ -83,7 +98,7 @@ namespace MedicalDutyAPI.Controllers
 
             var dbUser = db.Users
                 .Include(user => user.UserRoles)
-                    .ThenInclude(uRoles => uRoles.Role)
+                .ThenInclude(uRoles => uRoles.Role)
                 .FirstOrDefault(u => u.Id == user.Id);
 
             if (dbUser.FirstName != user.FirstName) dbUser.FirstName = user.FirstName;
@@ -96,7 +111,8 @@ namespace MedicalDutyAPI.Controllers
 
             if (user.UserRoles.Count > 0) dbUser.UserRoles.AddRange(user.UserRoles);
 
-            if (!string.IsNullOrEmpty(user.Password) && dbUser.Password != RegisterController.HashPasswordPbkdf2(user.Password, Convert.FromBase64String(dbUser.Salt)))
+            if (!string.IsNullOrEmpty(user.Password) && dbUser.Password !=
+                RegisterController.HashPasswordPbkdf2(user.Password, Convert.FromBase64String(dbUser.Salt)))
             {
                 var salt = RegisterController.GenerateSalt();
                 var hashedPassword = RegisterController.HashPasswordPbkdf2(user.Password, salt);
@@ -113,7 +129,7 @@ namespace MedicalDutyAPI.Controllers
 
         [HttpDelete("{userId}")]
         [Authorize(Roles = "headmaster, administrator")]
-        public ActionResult Delete([FromRoute]int userId)
+        public ActionResult Delete([FromRoute] int userId)
         {
             using var db = new DutyingContext();
 
