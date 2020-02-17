@@ -12,12 +12,11 @@ namespace MedicalDutyAPI.Controllers
     [Route("api/[controller]")]
     public class UsersController : Controller
     {
-        [HttpGet]
+        [HttpGet("search/{searchPhrase?}")]
         [Authorize(Roles = "headmaster, doctor, administrator")]
-        public ActionResult<IEnumerable<User>> Get(
+        public ActionResult<IEnumerable<User>> Get([FromRoute] string searchPhrase,
             [FromHeader(Name = "Paging-PageNo")] int pageNo,
-            [FromHeader(Name = "Paging-PageSize")] int pageSize,
-            [FromHeader(Name = "Search-Phrase")] string searchPhrase)
+            [FromHeader(Name = "Paging-PageSize")] int pageSize)
         {
             int skipRecords = (pageNo - 1) * pageSize;
 
@@ -53,6 +52,17 @@ namespace MedicalDutyAPI.Controllers
 
             return Ok(users);
         }
+        
+        [HttpGet]
+        [Authorize(Roles = "headmaster, doctor, administrator")]
+        public ActionResult<IEnumerable<User>> Get() {
+            using var db = new DutyingContext();
+
+            var hospitals = db.Hospitals.ToList();
+
+            return Ok(hospitals);
+        }
+        
 
         [HttpGet("userId/{userId}")]
         [Authorize(Roles = "headmaster, doctor, administrator")]

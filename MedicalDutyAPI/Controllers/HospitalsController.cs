@@ -14,17 +14,44 @@ namespace MedicalDutyAPI.Controllers
     [ApiController]
     public class HospitalsController : ControllerBase
     {
-        [HttpGet]
+        [HttpGet("search/{searchPhrase?}")]
         [Authorize(Roles = "headmaster, administrator")]
-        public ActionResult<IEnumerable<Hospital>> Get()
+        public ActionResult<IEnumerable<Hospital>> Get([FromRoute] string searchPhrase,
+            [FromHeader(Name = "Paging-PageNo")] int pageNo,
+            [FromHeader(Name = "Paging-PageSize")] int pageSize)
         {
+            int skipRecords = (pageNo - 1) * pageSize;
+            
             using var db = new DutyingContext();
 
-            var hospitals = db.Hospitals
+            var query = db.Hospitals.AsQueryable();
+            
+            if (!string.IsNullOrEmpty(searchPhrase))
+            {
+                query = query.Where(hospital =>
+                    hospital.Name.ToLower().Contains(searchPhrase.ToLower()));
+            }
+            
+            int totalRecords = query.Count();
+            
+            int pageCount = totalRecords > 0 ? (int) Math.Ceiling(totalRecords / (double) pageSize) : 0;
+
+            var hospitals = query.OrderBy(hospital => hospital.Name)
+                .Skip(skipRecords)
+                .Take(pageSize)
                 .ToList();
+            
+            pageNo = Math.Min(pageCount, pageNo);
+
+            Response.Headers.Add("Paging-PageNo", pageNo.ToString());
+            Response.Headers.Add("Paging-PageSize", pageSize.ToString());
+            Response.Headers.Add("Paging-PageCount", pageCount.ToString());
+            Response.Headers.Add("Paging-TotalRecordsCount", totalRecords.ToString());
 
             return Ok(hospitals);
         }
+        
+        
 
         [HttpGet("{hospitalId}")]
         [Authorize(Roles = "headmaster, administrator")]
