@@ -84,7 +84,7 @@ namespace MedicalDutyAPI.Controllers
 
             foreach (var role in user.UserRoles)
             {
-                claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, role.Role.Name));
+                claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, role.Role.Name.ToLower()));
             }
 
             return Task.FromResult(claimsIdentity);
