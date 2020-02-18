@@ -51,6 +51,16 @@ namespace MedicalDutyAPI.Controllers
             return Ok(hospitals);
         }
         
+        [HttpGet]
+        [Authorize(Roles = "headmaster, administrator")]
+        public ActionResult<IEnumerable<Hospital>> Get()
+        {
+            using var db = new DutyingContext();
+
+            var hospitals = db.Hospitals.ToList();
+            
+            return Ok(hospitals);
+        }
         
 
         [HttpGet("{hospitalId}")]
